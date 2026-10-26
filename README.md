@@ -71,7 +71,7 @@ Packagist registration is manual. The GitHub repository must be public.
 
 1. Push this repository to GitHub, including the `v1.0.0` tag.
 2. Sign in at [https://packagist.org](https://packagist.org) with the GitHub account that should own the `elx` vendor.
-3. Submit [https://github.com/rajesh-echologyx/elx-chatbot-connector-maho](https://github.com/rajesh-echologyx/elx-chatbot-connector-maho).
+3. Submit [https://github.com/EchoLogyx/elx-chatbot-connector-maho](https://github.com/EchoLogyx/elx-chatbot-connector-maho).
 4. On the package page, choose **GitHub Hook** so new tags are imported without another submit.
 
 After that, a Maho store installs it with:

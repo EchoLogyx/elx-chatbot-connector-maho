@@ -24,9 +24,38 @@ Composer puts the module in `vendor/elx/chatbot-connector`. Maho loads `app/code
 
 `composer require` recompiles routes and cron jobs. `./maho migrate` creates the `elxchatbot_settings` table from `sql/schema.php`. The cache flush loads the new module.
 
+Run `./maho` with the same PHP that serves the store. A Docker-based Maho install keeps Redis inside the app container. Running `./maho` on the host then fails with `Cannot find the "redis" extension`. Use the container instead:
+
+```bash
+docker compose exec -u www-data app php ./maho migrate
+docker compose exec -u www-data app php ./maho cache:flush
+```
+
 Open the Maho admin. The menu item is **ELX Chatbot Connector**.
 
-If **View JSON Feed** does not return JSON, allow `/feeds/*.json` in the store's nginx config. The feed file is written to `public/feeds/feed.json` when a merchant connects.
+## Product feed URL
+
+Connecting the store writes `public/feeds/feed.json`. Maho's default nginx answers `deny all` for `.json` files, so the feed URL returns **403** until that file is allowed. The module cannot change the web server config.
+
+Put these two locations above the general `.json` deny rule. nginx uses the first matching regular expression.
+
+```nginx
+# Product feeds are public JSON files written under public/feeds/.
+location ~ ^/feeds/.*\.json$ {
+    try_files $uri =404;
+    default_type application/json;
+    expires -1;
+    add_header Cache-Control "no-cache, must-revalidate";
+    access_log off;
+}
+
+# Catalog links can prepend the store code (/default/feeds/feed.json).
+location ~ ^/[^/]+/feeds/[^/]+\.json$ {
+    rewrite ^/[^/]+(/feeds/[^/]+\.json)$ $1 last;
+}
+```
+
+Reload nginx after saving the file. On this Docker setup that is `docker compose exec nginx nginx -s reload`, or restart the nginx service if it has another name.
 
 ## Update
 
@@ -36,12 +65,16 @@ composer update elx/chatbot-connector
 ./maho cache:flush
 ```
 
+On a Docker install, run the two `./maho` commands inside the app container, as in the install section.
+
 ## Remove
 
 ```bash
 composer remove elx/chatbot-connector
 ./maho cache:flush
 ```
+
+On a Docker install, run the cache flush inside the app container.
 
 This removes the code. The `elxchatbot_settings` table and any saved secret stay in the database. Maho does not drop that table on migrate.
 

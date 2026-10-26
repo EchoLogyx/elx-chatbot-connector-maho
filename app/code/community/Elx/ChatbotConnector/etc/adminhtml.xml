@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <elx_chatbotconnector translate="title" module="elx_chatbotconnector">
+            <title>ELX Chatbot Connector</title>
+            <sort_order>90</sort_order>
+            <action>adminhtml/elxchatbot/index</action>
+        </elx_chatbotconnector>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <elx_chatbotconnector translate="title" module="elx_chatbotconnector">
+                        <title>ELX Chatbot Connector</title>
+                        <sort_order>90</sort_order>
+                        <children>
+                            <chatbot translate="title">
+                                <title>API Access</title>
+                                <sort_order>10</sort_order>
+                            </chatbot>
+                        </children>
+                    </elx_chatbotconnector>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

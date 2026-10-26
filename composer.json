@@ -1,0 +1,17 @@
+{
+    "name": "elx/chatbot-connector",
+    "description": "ELX Chatbot Connector for Maho - product feed generation and order data sync for the ELX Chatbot service.",
+    "type": "maho-module",
+    "license": "OSL-3.0",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Elx",
+            "email": "support@elxchatbot.ai"
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "mahocommerce/maho": "*"
+    }
+}

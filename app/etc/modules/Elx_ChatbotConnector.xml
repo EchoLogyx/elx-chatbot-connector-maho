@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Elx_ChatbotConnector>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Adminhtml/>
+                <Mage_Catalog/>
+                <Mage_CatalogInventory/>
+                <Mage_Sales/>
+                <Maho_ApiPlatform/>
+            </depends>
+        </Elx_ChatbotConnector>
+    </modules>
+</config>

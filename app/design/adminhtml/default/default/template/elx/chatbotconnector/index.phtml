@@ -1,0 +1,309 @@
+<?php
+/** @var Elx_ChatbotConnector_Block_Adminhtml_Index $this */
+$isConnected = $this->isConnected();
+$dashboardUrl = $this->getDashboardUrl();
+$formKey = $this->getFormKey();
+?>
+<style>
+.elx-wrap { font-family: var(--maho-font-sans, 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif); color: var(--maho-ink, #303030); max-width: 640px; margin: 0 auto 24px; }
+.elx-banner { padding: 12px 16px; margin-bottom: 16px; background: var(--maho-info-bg, #f4f7fb); border: 1px solid var(--maho-info-border, #d6e2f0); color: var(--maho-ink, #303030); }
+.elx-banner a, .elx-wrap a { color: var(--maho-link, #007bdb); }
+.elx-card, .elx-section { background: var(--maho-surface, #fff); border: 1px solid var(--maho-border, #ddd); color: var(--maho-ink, #303030); padding: 20px; margin-bottom: 16px; border-radius: var(--maho-radius-md, 6px); }
+.elx-card { text-align: center; }
+.elx-card h2, .elx-section h3 { margin: 0 0 8px; font-weight: 600; color: var(--maho-ink, #303030); }
+.elx-subtitle { color: var(--maho-ink-muted, #666); margin: 0 0 16px; }
+.elx-field { text-align: left; margin-bottom: 12px; }
+.elx-field label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--maho-ink, #303030); }
+.elx-req { color: var(--maho-error, #c8401e); }
+.elx-input, .elx-select { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--maho-control-border, #adadad); background: var(--maho-control-bg, #fff); color: var(--maho-control-ink, #303030); font-size: 13px; border-radius: var(--maho-radius-sm, 4px); }
+.elx-input::placeholder { color: var(--maho-control-placeholder, #9e9e9e); }
+.elx-btn { display: inline-flex; align-items: center; align-self: center; height: auto; line-height: 1.2; white-space: nowrap; padding: 6px 14px; background: var(--maho-btn-bg, #1c1c1c); color: var(--maho-btn-ink, #fff); border: 0; cursor: pointer; font-weight: 600; border-radius: var(--maho-radius-sm, 4px); }
+.elx-btn:hover { background: var(--maho-btn-bg-hover, #d7df22); color: var(--maho-btn-ink-hover, #121212); }
+.elx-btn:disabled { opacity: .6; cursor: not-allowed; }
+.elx-btn-muted { background: var(--maho-btn2-bg, #fff); color: var(--maho-btn2-ink, #1c1c1c); border: 1px solid var(--maho-btn2-border, #ccc); }
+.elx-btn-muted:hover { background: var(--maho-btn2-bg-hover, #f1f1f1); color: var(--maho-btn2-ink, #1c1c1c); }
+.elx-btn-danger { background: var(--maho-btn2-bg, #fff); color: var(--maho-error, #b91c1c); border: 1px solid var(--maho-error-border, #fca5a5); }
+.elx-btn-danger:hover { background: var(--maho-error-bg, #fef2f2); color: var(--maho-error, #b91c1c); }
+.elx-order-actions { display: flex; align-items: center; align-self: center; gap: 8px; flex-shrink: 0; }
+.elx-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--maho-border-soft, #eee); }
+.elx-row > span:has(#elx-interval) { flex-shrink: 0; }
+#elx-interval.elx-select { appearance: auto; box-sizing: border-box; flex: 0 0 auto; width: 11rem; min-width: 11rem; height: 2.5rem; min-height: 2.5rem; line-height: 2.5rem; padding: 0 2rem 0 0.75rem; overflow: visible; }
+.elx-row:last-child { border-bottom: 0; }
+.elx-msg { display: none; margin-top: 8px; padding: 8px 10px; text-align: left; }
+.elx-msg.error { display: block; background: var(--maho-error-bg, #fef2f2); border: 1px solid var(--maho-error-border, #fca5a5); color: var(--maho-error, #b91c1c); }
+.elx-msg.success { display: block; background: var(--maho-success-bg, #f0fdf4); border: 1px solid var(--maho-success-border, #86efac); color: var(--maho-success, #166534); }
+.elx-ok { color: var(--maho-success, #008247); font-weight: 700; }
+.elx-links a { margin-left: 10px; }
+.elx-wrap code { background: var(--maho-surface-sunken, #f1f1f1); color: var(--maho-ink, #303030); padding: 1px 4px; border-radius: var(--maho-radius-sm, 4px); }
+#elx-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9000; }
+#elx-modal, #elx-secret-modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--maho-surface-overlay, #fff); color: var(--maho-ink, #303030); border: 1px solid var(--maho-border, #ddd); width: 560px; max-width: calc(100vw - 32px); padding: 20px; z-index: 9001; border-radius: var(--maho-radius-md, 6px); box-shadow: var(--maho-shadow-float, 0 8px 24px rgba(0,0,0,.12)); }
+#elx-secret-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 9000; }
+.elx-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+</style>
+
+<div class="elx-wrap">
+<?php if (!$isConnected): ?>
+    <div class="elx-banner">
+        <?= $this->escapeHtml($this->__('Find your key inside your ELX Chatbot dashboard. If you don\'t have one, you can generate it from your account.')) ?>
+        <a href="<?= $this->escapeUrl($dashboardUrl) ?>" target="_blank"><?= $this->escapeHtml($this->__('Go to ELX Chatbot Dashboard')) ?></a>
+    </div>
+    <div class="elx-card">
+        <h2><?= $this->escapeHtml($this->__('Connect ELX Chatbot with Maho')) ?></h2>
+        <p class="elx-subtitle"><?= $this->escapeHtml($this->__('Use your ELX Chatbot secret key to activate and sync your store.')) ?></p>
+        <div class="elx-field">
+            <label for="elx-secret-key"><?= $this->escapeHtml($this->__('Secret Key')) ?> <span class="elx-req">*</span></label>
+            <input id="elx-secret-key" class="elx-input" type="text" autocomplete="off" placeholder="<?= $this->escapeHtml($this->__('Paste your secret key here')) ?>">
+            <div id="elx-connect-msg" class="elx-msg"></div>
+        </div>
+        <button id="elx-connect-btn" class="elx-btn" type="button" data-url="<?= $this->escapeUrl($this->getSaveUrl()) ?>"><?= $this->escapeHtml($this->__('Connect & Verify')) ?></button>
+        <div style="margin-top:12px"><a href="<?= $this->escapeUrl($dashboardUrl) ?>" target="_blank"><?= $this->escapeHtml($this->__('Don\'t have a secret key?')) ?></a></div>
+    </div>
+<?php else: ?>
+    <div id="elx-feed-notify" class="elx-msg"></div>
+    <div class="elx-section">
+        <div class="elx-row" style="border:0;padding-top:0">
+            <h3><?= $this->escapeHtml($this->__('Store Info')) ?></h3>
+            <button id="elx-feed-btn" class="elx-btn" type="button" data-url="<?= $this->escapeUrl($this->getGenerateUrl()) ?>"><?= $this->escapeHtml($this->__('Update Product Feed')) ?></button>
+        </div>
+        <div class="elx-row"><strong><?= $this->escapeHtml($this->__('Store Name:')) ?></strong><span><?= $this->escapeHtml($this->getStoreName() ?: '—') ?></span></div>
+        <div class="elx-row"><strong><?= $this->escapeHtml($this->__('Owner Name:')) ?></strong><span><?= $this->escapeHtml($this->getOwnerName() ?: '—') ?></span></div>
+        <div class="elx-row"><strong><?= $this->escapeHtml($this->__('Contact Email:')) ?></strong><span><?= $this->escapeHtml($this->getContactEmail() ?: '—') ?></span></div>
+        <div class="elx-row"><strong><?= $this->escapeHtml($this->__('Default Currency:')) ?></strong><span><?= $this->escapeHtml($this->getDefaultCurrency() ?: '—') ?></span></div>
+    </div>
+
+    <div class="elx-section">
+        <h3><?= $this->escapeHtml($this->__('Feed Info')) ?></h3>
+        <div class="elx-row">
+            <strong><?= $this->escapeHtml($this->__('Feed Status:')) ?></strong>
+            <span><?php if ($this->isFeedAvailable()): ?><span class="elx-ok"><?= $this->escapeHtml($this->__('Available')) ?></span><?php else: ?><?= $this->escapeHtml($this->__('Not Generated')) ?><?php endif; ?></span>
+        </div>
+        <div class="elx-row">
+            <strong><?= $this->escapeHtml($this->__('Feed URL:')) ?></strong>
+            <span class="elx-links">
+                <?php if ($this->isFeedAvailable()): ?>
+                    <a href="<?= $this->escapeUrl($this->getFeedUrl()) ?>" target="_blank"><?= $this->escapeHtml($this->__('View JSON Feed')) ?></a>
+                    <a href="#" id="elx-copy-feed" data-url="<?= $this->escapeHtml($this->getFeedUrl()) ?>"><?= $this->escapeHtml($this->__('Copy Feed URL')) ?></a>
+                <?php else: ?>—<?php endif; ?>
+            </span>
+        </div>
+        <div class="elx-row"><strong><?= $this->escapeHtml($this->__('Last Updated:')) ?></strong><span><?= $this->escapeHtml($this->getLastUpdated()) ?></span></div>
+        <div class="elx-row">
+            <strong><?= $this->escapeHtml($this->__('Update Interval:')) ?></strong>
+            <span>
+                <select id="elx-interval" class="elx-select" data-url="<?= $this->escapeUrl($this->getIntervalUrl()) ?>">
+                    <?php foreach ($this->getUpdateIntervalOptions() as $value => $label): ?>
+                        <option value="<?= $this->escapeHtml($value) ?>"<?= $this->getUpdateInterval() === $value ? ' selected' : '' ?>><?= $this->escapeHtml($label) ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <span id="elx-interval-msg" class="elx-msg"></span>
+            </span>
+        </div>
+    </div>
+
+    <div class="elx-section">
+        <div class="elx-row" style="border:0">
+            <div>
+                <h3><?= $this->escapeHtml($this->__('Order lookup')) ?></h3>
+                <p class="elx-subtitle"><?= $this->escapeHtml($this->__('This is created automatically when you connect the ELX secret. A daily job replaces the order token before the 30-day expiry, so you do not renew it yourself.')) ?></p>
+            </div>
+            <?php if ($this->hasAccessToken()): ?>
+                <span class="elx-ok"><?= $this->escapeHtml($this->__('Ready')) ?></span>
+            <?php else: ?>
+                <button id="elx-order-access" class="elx-btn" type="button" data-url="<?= $this->escapeUrl($this->getOrderAccessUrl()) ?>"><?= $this->escapeHtml($this->__('Set up order lookup')) ?></button>
+            <?php endif; ?>
+        </div>
+        <div id="elx-order-msg" class="elx-msg"></div>
+        <p><?= $this->escapeHtml($this->__('Order endpoint:')) ?> <code>GET /api/rest/v2/integration/order?order_id=</code> <?= $this->escapeHtml($this->__('or')) ?> <code>?email=</code></p>
+    </div>
+
+    <div class="elx-section">
+        <div class="elx-row" style="border:0">
+            <div>
+                <h3><?= $this->escapeHtml($this->__('ELX secret')) ?></h3>
+                <p class="elx-subtitle"><?= $this->escapeHtml($this->__('This is the secret from the ELX platform that you pasted when connecting the store.')) ?></p>
+            </div>
+            <div class="elx-order-actions">
+                <button id="elx-open-secret" class="elx-btn" type="button"><?= $this->escapeHtml($this->__('Update ELX secret')) ?></button>
+                <button id="elx-logout" class="elx-btn elx-btn-danger" type="button" data-url="<?= $this->escapeUrl($this->getLogoutUrl()) ?>"><?= $this->escapeHtml($this->__('Disconnect')) ?></button>
+            </div>
+        </div>
+        <div id="elx-secret-msg" class="elx-msg"></div>
+    </div>
+
+    <div id="elx-secret-overlay"></div>
+    <div id="elx-secret-modal">
+        <h3><?= $this->escapeHtml($this->__('Update ELX secret')) ?></h3>
+        <p><?= $this->escapeHtml($this->__('Paste the new secret from your ELX Chatbot dashboard. This replaces the one used to connect this store.')) ?></p>
+        <div class="elx-field"><label for="elx-new-secret"><?= $this->escapeHtml($this->__('ELX secret')) ?> <span class="elx-req">*</span></label><input id="elx-new-secret" class="elx-input" type="password" autocomplete="off"></div>
+        <div id="elx-secret-modal-msg" class="elx-msg"></div>
+        <div class="elx-actions">
+            <button id="elx-cancel-secret" class="elx-btn elx-btn-muted" type="button"><?= $this->escapeHtml($this->__('Cancel')) ?></button>
+            <button id="elx-save-secret" class="elx-btn" type="button" data-url="<?= $this->escapeUrl($this->getSecretUrl()) ?>"><?= $this->escapeHtml($this->__('Update')) ?></button>
+        </div>
+    </div>
+<?php endif; ?>
+</div>
+<script>
+(function () {
+    var formKey = <?= json_encode($formKey) ?>;
+
+    function post(url, fields) {
+        var body = new URLSearchParams(fields);
+        body.set('form_key', formKey);
+        body.set('isAjax', '1');
+        return fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest'},
+            body: body
+        }).then(function (response) { return response.json(); });
+    }
+
+    function show(el, ok, text) {
+        el.className = 'elx-msg ' + (ok ? 'success' : 'error');
+        el.textContent = text;
+    }
+
+    var connectBtn = document.getElementById('elx-connect-btn');
+    if (connectBtn) {
+        connectBtn.addEventListener('click', function () {
+            var input = document.getElementById('elx-secret-key');
+            var msg = document.getElementById('elx-connect-msg');
+            var key = input.value.trim();
+            if (!key) {
+                show(msg, false, 'Secret Key is required.');
+                return;
+            }
+            connectBtn.disabled = true;
+            post(connectBtn.dataset.url, {secret_key: key}).then(function (res) {
+                connectBtn.disabled = false;
+                show(msg, !!(res && res.success), (res && res.message) || 'Could not connect.');
+                if (res && res.success) {
+                    setTimeout(function () { window.location.reload(); }, 1200);
+                }
+            }).catch(function () {
+                connectBtn.disabled = false;
+                show(msg, false, 'Network error. Please check your connection.');
+            });
+        });
+    }
+
+    var feedBtn = document.getElementById('elx-feed-btn');
+    if (feedBtn) {
+        feedBtn.addEventListener('click', function () {
+            var notify = document.getElementById('elx-feed-notify');
+            feedBtn.disabled = true;
+            post(feedBtn.dataset.url, {}).then(function (res) {
+                feedBtn.disabled = false;
+                show(notify, !!(res && res.success), (res && res.message) || 'Feed generation failed.');
+                if (res && res.success) {
+                    setTimeout(function () { window.location.reload(); }, 1500);
+                }
+            }).catch(function () {
+                feedBtn.disabled = false;
+                show(notify, false, 'Network error. Please try again.');
+            });
+        });
+    }
+
+    var interval = document.getElementById('elx-interval');
+    if (interval) {
+        interval.addEventListener('change', function () {
+            var msg = document.getElementById('elx-interval-msg');
+            interval.disabled = true;
+            post(interval.dataset.url, {update_interval: interval.value}).then(function (res) {
+                interval.disabled = false;
+                show(msg, !!(res && res.success), (res && res.message) || 'Save failed.');
+            }).catch(function () {
+                interval.disabled = false;
+                show(msg, false, 'Network error.');
+            });
+        });
+    }
+
+    var copy = document.getElementById('elx-copy-feed');
+    if (copy) {
+        copy.addEventListener('click', function (event) {
+            event.preventDefault();
+            var url = copy.getAttribute('data-url') || '';
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url);
+            }
+        });
+    }
+
+    var orderBtn = document.getElementById('elx-order-access');
+    if (orderBtn) {
+        orderBtn.addEventListener('click', function () {
+            var msg = document.getElementById('elx-order-msg');
+            orderBtn.disabled = true;
+            post(orderBtn.dataset.url, {}).then(function (res) {
+                orderBtn.disabled = false;
+                show(msg, !!(res && res.success), (res && res.message) || 'Could not set up order lookup.');
+                if (res && res.success) {
+                    setTimeout(function () { window.location.reload(); }, 900);
+                }
+            }).catch(function () {
+                orderBtn.disabled = false;
+                show(msg, false, 'Network error. Please try again.');
+            });
+        });
+    }
+
+    var secretOverlay = document.getElementById('elx-secret-overlay');
+    var secretModal = document.getElementById('elx-secret-modal');
+    function closeSecretModal() {
+        if (secretOverlay) secretOverlay.style.display = 'none';
+        if (secretModal) secretModal.style.display = 'none';
+    }
+    var openSecret = document.getElementById('elx-open-secret');
+    if (openSecret) {
+        openSecret.addEventListener('click', function () {
+            secretOverlay.style.display = 'block';
+            secretModal.style.display = 'block';
+        });
+        document.getElementById('elx-cancel-secret').addEventListener('click', closeSecretModal);
+        secretOverlay.addEventListener('click', closeSecretModal);
+        document.getElementById('elx-save-secret').addEventListener('click', function () {
+            var btn = document.getElementById('elx-save-secret');
+            var msg = document.getElementById('elx-secret-modal-msg');
+            var secret = document.getElementById('elx-new-secret').value.trim();
+            if (!secret) {
+                show(msg, false, 'ELX secret is required.');
+                return;
+            }
+            btn.disabled = true;
+            post(btn.dataset.url, {secret_key: secret}).then(function (res) {
+                btn.disabled = false;
+                show(msg, !!(res && res.success), (res && res.message) || 'Could not update the ELX secret.');
+                if (res && res.success) {
+                    setTimeout(function () { window.location.reload(); }, 900);
+                }
+            }).catch(function () {
+                btn.disabled = false;
+                show(msg, false, 'Network error. Please try again.');
+            });
+        });
+    }
+
+    var logoutBtn = document.getElementById('elx-logout');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function () {
+            var msg = document.getElementById('elx-secret-msg');
+            if (!window.confirm('Remove the ELX secret stored for this store? You can connect again with a different one.')) {
+                return;
+            }
+            logoutBtn.disabled = true;
+            post(logoutBtn.dataset.url, {}).then(function (res) {
+                logoutBtn.disabled = false;
+                show(msg, !!(res && res.success), (res && res.message) || 'Could not remove the access token.');
+                if (res && res.success) {
+                    setTimeout(function () { window.location.reload(); }, 900);
+                }
+            }).catch(function () {
+                logoutBtn.disabled = false;
+                show(msg, false, 'Network error. Please try again.');
+            });
+        });
+    }
+})();
+</script>

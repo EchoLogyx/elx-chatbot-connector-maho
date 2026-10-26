@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout>
+    <default>
+        <reference name="before_body_end">
+            <block type="elx_chatbotconnector/script" name="elx_chatbotconnector_script" template="elx/chatbotconnector/script.phtml"/>
+        </reference>
+    </default>
+</layout>

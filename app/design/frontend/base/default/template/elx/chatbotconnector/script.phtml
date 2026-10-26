@@ -1,0 +1,7 @@
+<?php
+/** @var Elx_ChatbotConnector_Block_Script $this */
+$scriptUrl = $this->getScriptUrl();
+?>
+<?php if ($scriptUrl !== ''): ?>
+<script src="<?= $this->escapeUrl($scriptUrl) ?>" defer></script>
+<?php endif; ?>
